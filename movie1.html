@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie 1</title>
+</head>
+<style>
+    .wholepage {
+        /* border: 1px solid red; */
+        width: 90%;
+        height: 800px;
+        margin: auto;
+        /* margin-top: 0px; */
+    }
+
+    header {
+        /* border: 1px solid green; */
+        width: 100%;
+        height: 70px;
+        display: grid;
+        grid-template-columns: 25% 25% 25%;
+        grid-gap: 5%;
+        /* border: 1px solid yellow; */
+        justify-content: center;
+    }
+
+    #logo {
+        width: 25%;
+        margin: auto;
+    }
+
+    #search {
+        width: 80%;
+        height: 35px;
+        margin-top: 5px;
+    }
+
+    #sbtn {
+        height: 30px;
+    }
+
+    .btn {
+        margin-top: 8px;
+    }
+
+    .btn a button {
+        height: 30px;
+        margin-left: 50px;
+        color: red;
+    }
+
+    #movie_cont {
+
+        padding: 10% 20% 10% 20%;
+        /* border: 1px solid black; */
+
+        display: grid;
+        grid-template-columns: 30% 30% 30% 30%;
+        grid-gap: 5%;
+        justify-content: center;
+
+    }
+
+    #movie_cont img {
+        width: 80%;
+        height: 400px;
+    }
+</style>
+
+<body>
+    <div class="wholepage">
+        <header>
+            <div>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/IMDB_Logo_2016.svg/1200px-IMDB_Logo_2016.svg.png"
+                    alt="logo" id="logo">
+            </div>
+            <div>
+                <input type="text" placeholder="search" id="search"><span><button onclick="getmovie()"
+                        id="sbtn">search</button></span>
+            </div>
+            <div class="btn">
+                <a href="#"><button>+wishlist</button></a>
+                <a href="#"><button>sign in</button></a>
+            </div>
+        </header>
+
+        <!-- <div>
+            <h1>filter</h1>
+            <button>low to high</button>
+            <button>high to low</button>
+        </div> -->
+
+
+        <div id="errormess">
+            <p id="error">1</p>
+        </div>
+        <div id="movie_cont">
+            <!-- -data insearted by script -->
+        </div>
+    </div>
+</body>
+<script>
+
+    let container = document.getElementById("movie_cont")
+
+    async function getmovie() {
+
+        let movie = document.getElementById("search").value
+
+
+        var res = await fetch(`https://www.omdbapi.com/?s=${movie}&apikey=d5f76536`);
+        // console.log(res.json())
+
+
+
+        let data = await res.json();
+
+        // console.log(data.Search)
+        if (data.Search == undefined) {
+            alert("data not found")
+        } else {
+            showMovie(data.Search);
+        }
+
+
+    };
+
+    function showMovie(d) {
+
+
+        container.innerHTML = null;
+
+        d.forEach(function (product) {
+
+            // console.log(product)
+
+            let div = document.createElement("div");
+            let img = document.createElement("img");
+            img.src = product.Poster
+
+            let product_year = document.createElement("p");
+
+            product_year.textContent = product.Year
+
+            let product_name = document.createElement("h4");
+
+            product_name.textContent = product.Title;
+
+            let product_type = document.createElement("p");
+
+            product_type.textContent = product.Type
+
+            div.append(img, product_name, product_year, product_type);
+
+            container.append(div);
+
+        });
+    }
+
+
+</script>
+
+</html>
